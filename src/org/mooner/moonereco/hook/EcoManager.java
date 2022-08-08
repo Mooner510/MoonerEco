@@ -166,8 +166,7 @@ public class EcoManager implements Economy {
     }
 
     @Override
-    public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, String s, double v) {
-        OfflinePlayer p = Bukkit.getOfflinePlayer(UUID.fromString(s));
+    public EconomyResponse depositPlayer(OfflinePlayer p, String s, double v) {
         init.addPay(p, v);
         return new EconomyResponse(v, init.getLocalPay(p), EconomyResponse.ResponseType.SUCCESS, "");
     }

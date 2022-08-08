@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="MoonerEco">
-    <output-path>$PROJECT_DIR$/../../../Servers/1.18/Lite24/sv/plugins</output-path>
+    <output-path>$PROJECT_DIR$/../../../Servers/1.18/Lite24/야생서버/plugins</output-path>
     <root id="archive" name="MoonerEco.jar">
       <element id="file-copy" path="$PROJECT_DIR$/plugin.yml" />
       <element id="module-output" name="MoonerEco" />

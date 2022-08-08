@@ -45,7 +45,7 @@ public class EcoAPI {
                 Connection c = DriverManager.getConnection(CONNECTION);
                 PreparedStatement s = c.prepareStatement(
                         "CREATE TABLE IF NOT EXISTS Log (" +
-                                "id INTEGER NOT NULL" +
+                                "id INTEGER NOT NULL," +
                                 "source TEXT NOT NULL," +
                                 "uuid TEXT NOT NULL," +
                                 "to TEXT," +
