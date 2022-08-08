@@ -1,14 +1,15 @@
-package Mooner;
+package org.mooner.moonereco.hook;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.mooner.moonereco.Utils;
 
 import java.util.List;
 import java.util.UUID;
 
-import static Mooner.API.EcoAPI.*;
+import static org.mooner.moonereco.API.EcoAPI.init;
 
 public class EcoManager implements Economy {
     @Override
@@ -109,30 +110,38 @@ public class EcoManager implements Economy {
     @Override
     public EconomyResponse withdrawPlayer(String s, double v) {
         OfflinePlayer p = Bukkit.getOfflinePlayer(UUID.fromString(s));
-        if (init.removePay(p, v))
+        if (init.hasPay(p, v)) {
+            init.removePay(p, v);
             return new EconomyResponse(v, init.getLocalPay(p), EconomyResponse.ResponseType.SUCCESS, "");
+        }
         return new EconomyResponse(0, init.getLocalPay(p), EconomyResponse.ResponseType.FAILURE, "충분한 돈을 가지고 있지 않습니다.");
     }
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer p, double v) {
-        if (init.removePay(p, v))
+        if (init.hasPay(p, v)) {
+            init.removePay(p, v);
             return new EconomyResponse(v, init.getLocalPay(p), EconomyResponse.ResponseType.SUCCESS, "");
+        }
         return new EconomyResponse(0, init.getLocalPay(p), EconomyResponse.ResponseType.FAILURE, "충분한 돈을 가지고 있지 않습니다.");
     }
 
     @Override
     public EconomyResponse withdrawPlayer(String s, String s1, double v) {
         OfflinePlayer p = Bukkit.getOfflinePlayer(UUID.fromString(s));
-        if (init.removePay(p, v))
+        if (init.hasPay(p, v)) {
+            init.removePay(p, v);
             return new EconomyResponse(v, init.getLocalPay(p), EconomyResponse.ResponseType.SUCCESS, "");
+        }
         return new EconomyResponse(0, init.getLocalPay(p), EconomyResponse.ResponseType.FAILURE, "충분한 돈을 가지고 있지 않습니다.");
     }
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer p, String s, double v) {
-        if (init.removePay(p, v))
+        if (init.hasPay(p, v)) {
+            init.removePay(p, v);
             return new EconomyResponse(v, init.getLocalPay(p), EconomyResponse.ResponseType.SUCCESS, "");
+        }
         return new EconomyResponse(0, init.getLocalPay(p), EconomyResponse.ResponseType.FAILURE, "충분한 돈을 가지고 있지 않습니다.");
     }
 

@@ -1,9 +1,10 @@
-package Mooner;
+package org.mooner.moonereco.hook;
 
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.ServicePriority;
+import org.mooner.moonereco.MoonerEco;
 
 public class EcoHook {
     private Economy provider;
