@@ -1,0 +1,14 @@
+name: MoonerEco
+main: Mooner.MoonerEco
+version: 1.0
+depends: [Vault, ProtocolLib]
+description: Bank and Economy Plugin
+author: Mooner510
+
+commands:
+  money:
+    description: MoonerEco's main command
+    aliases:
+      - 돈
+      - ehs
+      - ㅡㅐㅜ됴

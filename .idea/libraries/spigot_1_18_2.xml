@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="spigot-1.18.2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../API/ProtocolLib.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../API/Vault.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
