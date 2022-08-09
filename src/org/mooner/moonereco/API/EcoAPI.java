@@ -46,7 +46,7 @@ public class EcoAPI {
                                 "id INTEGER NOT NULL," +
                                 "source TEXT NOT NULL," +
                                 "uuid TEXT NOT NULL," +
-                                "\"to\" TEXT," +
+                                "uuid2 TEXT," +
                                 "value REAL NOT NULL," +
                                 "timestamp INTEGER NOT NULL," +
                                 "PRIMARY KEY(id AUTOINCREMENT)" +
@@ -158,7 +158,7 @@ public class EcoAPI {
         Bukkit.getScheduler().runTaskAsynchronously(MoonerEco.plugin, () -> {
             try (
                     Connection c = DriverManager.getConnection(CONNECTION);
-                    PreparedStatement s = c.prepareStatement("INSERT INTO MoneyLog (source, uuid, to, value, timestamp) VALUES(?, ?, null, ?, ?)")
+                    PreparedStatement s = c.prepareStatement("INSERT INTO Log (source, uuid, uuid2, value, timestamp) VALUES(?, ?, null, ?, ?)")
             ) {
                 s.setString(1, type.toString());
                 s.setString(2, player.getUniqueId().toString());
@@ -176,7 +176,7 @@ public class EcoAPI {
         Bukkit.getScheduler().runTaskAsynchronously(MoonerEco.plugin, () -> {
             try (
                     Connection c = DriverManager.getConnection(CONNECTION);
-                    PreparedStatement s = c.prepareStatement("INSERT INTO MoneyLog (source, uuid, to, value, timestamp) VALUES(?, ?, ?, ?, ?)")
+                    PreparedStatement s = c.prepareStatement("INSERT INTO Log (source, uuid, uuid2, value, timestamp) VALUES(?, ?, ?, ?, ?)")
             ) {
                 s.setString(1, type.toString());
                 s.setString(2, player.getUniqueId().toString());
@@ -194,7 +194,7 @@ public class EcoAPI {
         UUID uuid = p.getUniqueId();
         try (
                 Connection c = DriverManager.getConnection(CONNECTION);
-                PreparedStatement s = c.prepareStatement("SELECT * FROM PayLog WHERE to=? and source=\"PAY\" and timestamp >= " + p.getLastPlayed())
+                PreparedStatement s = c.prepareStatement("SELECT * FROM Log WHERE uuid2=? and source=\"PAY\" and timestamp >= " + p.getLastPlayed())
         ) {
             s.setString(1, uuid.toString());
             try (ResultSet r = s.executeQuery()) {

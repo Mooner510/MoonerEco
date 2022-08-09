@@ -1,6 +1,9 @@
 package org.mooner.moonereco;
 
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.mooner.moonereco.API.EcoAPI;
+import org.mooner.moonereco.API.LogData;
 import org.mooner.moonereco.API.LogType;
 import org.mooner.moonereco.API.MoneyData;
 import org.bukkit.Bukkit;
@@ -49,6 +52,14 @@ public class MoonerEco extends JavaPlugin implements Listener {
         Bukkit.getConsoleSender().sendMessage(chat("&bPlugin Disabled! &7- &6MoonerEco"));
     }
 
+    @EventHandler
+    public void onJoin(PlayerJoinEvent e) {
+        for (LogData data : EcoAPI.init.getLogUnViewed(e.getPlayer())) {
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(data.getTo());
+            e.getPlayer().sendMessage(prefix + chat("&a오프라인&f인 동안 &e" + offlinePlayer.getName() + "&f님으로부터 &a" + parseString(data.getValue(), 2, true) + "원&f을 받았습니다."));
+        }
+    }
+
     private static final String prefix = chat("&e[ &f돈 &e] ");
 
     public OfflinePlayer getOfflinePlayer(String s) {
@@ -94,7 +105,7 @@ public class MoonerEco extends JavaPlugin implements Listener {
                                     p.sendMessage(prefix + chat("&c최소 &60.1원&c이상 보내야 합니다!"));
                                     return true;
                                 }
-                                if (EcoAPI.init.hasPay(p, d)) {
+                                if (!EcoAPI.init.hasPay(p, d)) {
                                     p.sendMessage(prefix + chat("&c가진 돈 보다 더 많은 돈을 보낼 수 없습니다!"));
                                     return true;
                                 }
