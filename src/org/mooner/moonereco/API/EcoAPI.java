@@ -12,12 +12,10 @@ import java.util.*;
 
 public class EcoAPI {
     public static EcoAPI init;
-    private final HashMap<UUID, Double> lastPay;
+//    private final HashMap<UUID, Double> lastPay;
     private static final String CONNECTION = "jdbc:sqlite:" + MoonerEco.dataPath + "eco.db";
 
     public EcoAPI() {
-        lastPay = new HashMap<>();
-
         new File(MoonerEco.dataPath).mkdirs();
         File db = new File(MoonerEco.dataPath, "eco.db");
         if(!db.exists()) {
@@ -62,7 +60,7 @@ public class EcoAPI {
     }
 
     public boolean hasPay(OfflinePlayer p, double amount) {
-        return this.lastPay.getOrDefault(p.getUniqueId(), 0d) >= amount;
+        return getPay(p) >= amount;
     }
 
     public boolean hasPayAccount(OfflinePlayer p) {
@@ -82,7 +80,7 @@ public class EcoAPI {
         return false;
     }
 
-    private double getPay(OfflinePlayer p) {
+    public double getPay(OfflinePlayer p) {
         try(
                 Connection c = DriverManager.getConnection(CONNECTION);
                 PreparedStatement s = c.prepareStatement("SELECT value FROM Money WHERE uuid=?")
@@ -92,9 +90,8 @@ public class EcoAPI {
                     ResultSet r = s.executeQuery()
             ) {
                 if (r.next()) {
-                    final double amount = r.getDouble(1);
-                    this.lastPay.put(p.getUniqueId(), amount);
-                    return amount;
+                    //                    this.lastPay.put(p.getUniqueId(), amount);
+                    return r.getDouble(1);
                 }
             }
         } catch (SQLException e) {
@@ -103,15 +100,15 @@ public class EcoAPI {
         return 0;
     }
 
-    public double getLocalPay(OfflinePlayer p) {
-        Double d = this.lastPay.get(p.getUniqueId());
-        if(d == null) {
-            double pay = getPay(p);
-            this.lastPay.put(p.getUniqueId(), pay);
-            return pay;
-        }
-        return d;
-    }
+//    public double getPay(OfflinePlayer p) {
+//        Double d = this.lastPay.get(p.getUniqueId());
+//        if(d == null) {
+//            double pay = getPay(p);
+//            this.lastPay.put(p.getUniqueId(), pay);
+//            return pay;
+//        }
+//        return d;
+//    }
 
     public void setPay(OfflinePlayer p, double amount) {
         Bukkit.getScheduler().runTaskAsynchronously(MoonerEco.plugin, () -> {
@@ -123,7 +120,6 @@ public class EcoAPI {
                 s.setDouble(2, amount);
                 s.setDouble(3, amount);
                 s.executeUpdate();
-                this.lastPay.put(p.getUniqueId(), amount);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -131,11 +127,11 @@ public class EcoAPI {
     }
 
     public void addPay(OfflinePlayer p, double amount) {
-        setPay(p, getLocalPay(p) + amount);
+        setPay(p, getPay(p) + amount);
     }
 
     public void removePay(OfflinePlayer p, double amount) {
-        setPay(p, getLocalPay(p) - amount);
+        setPay(p, getPay(p) - amount);
     }
 
     public List<MoneyData> getTopUser(long length) {

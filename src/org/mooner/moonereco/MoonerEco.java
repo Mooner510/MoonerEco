@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mooner.moonereco.hook.Bungee;
 import org.mooner.moonereco.hook.EcoHook;
 import org.mooner.moonereco.hook.EcoManager;
 
@@ -38,6 +39,7 @@ public class MoonerEco extends JavaPlugin implements Listener {
         EcoAPI.init = new EcoAPI();
 
         Bukkit.getConsoleSender().sendMessage(chat("&bPlugin Enabled! &7- &6MoonerEco"));
+        getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         Bukkit.getServer().getPluginManager().registerEvents(this, this);
     }
 
@@ -58,11 +60,11 @@ public class MoonerEco extends JavaPlugin implements Listener {
     }
 
     public void me(Player p) {
-        p.sendMessage(prefix + chat("&f잔고 : &a" + parseString(EcoAPI.init.getLocalPay(p), 2, true) + "&f원"));
+        p.sendMessage(prefix + chat("&f잔고 : &a" + parseString(EcoAPI.init.getPay(p), 2, true) + "&f원"));
     }
 
     public void you(Player p, OfflinePlayer o) {
-        p.sendMessage(prefix + chat("&a"+o.getName()+"&f님의 잔고 : &a" + parseString(EcoAPI.init.getLocalPay(p), 2, true) + "&f원"));
+        p.sendMessage(prefix + chat("&a"+o.getName()+"&f님의 잔고 : &a" + parseString(EcoAPI.init.getPay(p), 2, true) + "&f원"));
     }
 
     @Override
@@ -103,6 +105,8 @@ public class MoonerEco extends JavaPlugin implements Listener {
                                 Player offPlayer = player.getPlayer();
                                 if(offPlayer != null)
                                     offPlayer.sendMessage(prefix + chat("&e" + p.getName() + "&f님으로부터 &a" + parseString(d, 2, true) + "원&f을 받았습니다."));
+                                else
+                                    Bungee.sendBungeeMessage(player.getName(), prefix + chat("&e" + p.getName() + "&f님으로부터 &a" + parseString(d, 2, true) + "원&f을 받았습니다."));
                             } else {
                                 p.sendMessage(prefix + chat("&c보낼 금액을 입력해주세요."));
                             }

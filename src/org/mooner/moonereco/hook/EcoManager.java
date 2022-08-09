@@ -69,22 +69,22 @@ public class EcoManager implements Economy {
 
     @Override
     public double getBalance(String s) {
-        return init.getLocalPay(Bukkit.getOfflinePlayer(UUID.fromString(s)));
+        return init.getPay(Bukkit.getOfflinePlayer(UUID.fromString(s)));
     }
 
     @Override
     public double getBalance(OfflinePlayer offlinePlayer) {
-        return init.getLocalPay(offlinePlayer);
+        return init.getPay(offlinePlayer);
     }
 
     @Override
     public double getBalance(String s, String s1) {
-        return init.getLocalPay(Bukkit.getOfflinePlayer(UUID.fromString(s)));
+        return init.getPay(Bukkit.getOfflinePlayer(UUID.fromString(s)));
     }
 
     @Override
     public double getBalance(OfflinePlayer offlinePlayer, String s) {
-        return init.getLocalPay(offlinePlayer);
+        return init.getPay(offlinePlayer);
     }
 
     @Override
@@ -112,18 +112,18 @@ public class EcoManager implements Economy {
         OfflinePlayer p = Bukkit.getOfflinePlayer(UUID.fromString(s));
         if (init.hasPay(p, v)) {
             init.removePay(p, v);
-            return new EconomyResponse(v, init.getLocalPay(p), EconomyResponse.ResponseType.SUCCESS, "");
+            return new EconomyResponse(v, init.getPay(p), EconomyResponse.ResponseType.SUCCESS, "");
         }
-        return new EconomyResponse(0, init.getLocalPay(p), EconomyResponse.ResponseType.FAILURE, "충분한 돈을 가지고 있지 않습니다.");
+        return new EconomyResponse(0, init.getPay(p), EconomyResponse.ResponseType.FAILURE, "충분한 돈을 가지고 있지 않습니다.");
     }
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer p, double v) {
         if (init.hasPay(p, v)) {
             init.removePay(p, v);
-            return new EconomyResponse(v, init.getLocalPay(p), EconomyResponse.ResponseType.SUCCESS, "");
+            return new EconomyResponse(v, init.getPay(p), EconomyResponse.ResponseType.SUCCESS, "");
         }
-        return new EconomyResponse(0, init.getLocalPay(p), EconomyResponse.ResponseType.FAILURE, "충분한 돈을 가지고 있지 않습니다.");
+        return new EconomyResponse(0, init.getPay(p), EconomyResponse.ResponseType.FAILURE, "충분한 돈을 가지고 있지 않습니다.");
     }
 
     @Override
@@ -131,44 +131,44 @@ public class EcoManager implements Economy {
         OfflinePlayer p = Bukkit.getOfflinePlayer(UUID.fromString(s));
         if (init.hasPay(p, v)) {
             init.removePay(p, v);
-            return new EconomyResponse(v, init.getLocalPay(p), EconomyResponse.ResponseType.SUCCESS, "");
+            return new EconomyResponse(v, init.getPay(p), EconomyResponse.ResponseType.SUCCESS, "");
         }
-        return new EconomyResponse(0, init.getLocalPay(p), EconomyResponse.ResponseType.FAILURE, "충분한 돈을 가지고 있지 않습니다.");
+        return new EconomyResponse(0, init.getPay(p), EconomyResponse.ResponseType.FAILURE, "충분한 돈을 가지고 있지 않습니다.");
     }
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer p, String s, double v) {
         if (init.hasPay(p, v)) {
             init.removePay(p, v);
-            return new EconomyResponse(v, init.getLocalPay(p), EconomyResponse.ResponseType.SUCCESS, "");
+            return new EconomyResponse(v, init.getPay(p), EconomyResponse.ResponseType.SUCCESS, "");
         }
-        return new EconomyResponse(0, init.getLocalPay(p), EconomyResponse.ResponseType.FAILURE, "충분한 돈을 가지고 있지 않습니다.");
+        return new EconomyResponse(0, init.getPay(p), EconomyResponse.ResponseType.FAILURE, "충분한 돈을 가지고 있지 않습니다.");
     }
 
     @Override
     public EconomyResponse depositPlayer(String s, double v) {
         OfflinePlayer p = Bukkit.getOfflinePlayer(UUID.fromString(s));
         init.addPay(p, v);
-        return new EconomyResponse(v, init.getLocalPay(p), EconomyResponse.ResponseType.SUCCESS, "");
+        return new EconomyResponse(v, init.getPay(p), EconomyResponse.ResponseType.SUCCESS, "");
     }
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer p, double v) {
         init.addPay(p, v);
-        return new EconomyResponse(v, init.getLocalPay(p), EconomyResponse.ResponseType.SUCCESS, "");
+        return new EconomyResponse(v, init.getPay(p), EconomyResponse.ResponseType.SUCCESS, "");
     }
 
     @Override
     public EconomyResponse depositPlayer(String s, String s1, double v) {
         OfflinePlayer p = Bukkit.getOfflinePlayer(UUID.fromString(s));
         init.addPay(p, v);
-        return new EconomyResponse(v, init.getLocalPay(p), EconomyResponse.ResponseType.SUCCESS, "");
+        return new EconomyResponse(v, init.getPay(p), EconomyResponse.ResponseType.SUCCESS, "");
     }
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer p, String s, double v) {
         init.addPay(p, v);
-        return new EconomyResponse(v, init.getLocalPay(p), EconomyResponse.ResponseType.SUCCESS, "");
+        return new EconomyResponse(v, init.getPay(p), EconomyResponse.ResponseType.SUCCESS, "");
     }
 
     @Override
