@@ -58,11 +58,11 @@ public class MoonerEco extends JavaPlugin implements Listener {
     }
 
     public void me(Player p) {
-        p.sendMessage(prefix + chat("&f잔고 : &a" + parseString(EcoAPI.init.getLocalPay(p), 2, true)));
+        p.sendMessage(prefix + chat("&f잔고 : &a" + parseString(EcoAPI.init.getLocalPay(p), 2, true) + "&f원"));
     }
 
     public void you(Player p, OfflinePlayer o) {
-        p.sendMessage(prefix + chat("&a"+o.getName()+"&f님의 잔고 : &a" + parseString(EcoAPI.init.getLocalPay(p), 2, true)));
+        p.sendMessage(prefix + chat("&a"+o.getName()+"&f님의 잔고 : &a" + parseString(EcoAPI.init.getLocalPay(p), 2, true) + "&f원"));
     }
 
     @Override
@@ -234,7 +234,7 @@ public class MoonerEco extends JavaPlugin implements Listener {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (command.getName().equals("money") && sender instanceof Player p) {
-            if(args.length >= 1) {
+            if(args.length == 1) {
                 ArrayList<String> list = new ArrayList<>(p.isOp() ? adminList : normalList);
                 list.addAll(Arrays.stream(Bukkit.getOfflinePlayers()).map(OfflinePlayer::getName).filter(Objects::nonNull).toList());
                 return list;
