@@ -48,7 +48,7 @@ public class EcoAPI {
                                 "id INTEGER NOT NULL," +
                                 "source TEXT NOT NULL," +
                                 "uuid TEXT NOT NULL," +
-                                "to TEXT," +
+                                "\"to\" TEXT," +
                                 "value REAL NOT NULL," +
                                 "timestamp INTEGER NOT NULL," +
                                 "PRIMARY KEY(id AUTOINCREMENT)" +
