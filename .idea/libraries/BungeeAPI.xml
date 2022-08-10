@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="BungeeAPI">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../Servers/1.18/Lite24/메인서버/plugins/BungeeAPI.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -19,5 +19,6 @@
     <orderEntry type="library" name="ProtocolLib" level="project" />
     <orderEntry type="library" name="spigot-1.18.2" level="project" />
     <orderEntry type="library" name="org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="BungeeAPI" level="project" />
   </component>
 </module>
