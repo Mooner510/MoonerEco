@@ -127,12 +127,14 @@ public class MoonerEco extends JavaPlugin implements Listener {
                         return true;
                     }
                     case "순위", "top", "tnsdnl" -> {
+                        p.sendMessage(chat("&7========= &e[ &f돈 순위 &e] &7========="));
                         int top = 1;
-                        for (MoneyData data : EcoAPI.init.getTopUser(7)) {
+                        for (MoneyData data : EcoAPI.init.getTopUser(8)) {
                             OfflinePlayer player = Bukkit.getOfflinePlayer(data.getUUID());
                             p.sendMessage(chat("  &b" + player.getName() + " &f- " + (top == 1 ? "&c" : top == 2 ? "&6" : top == 3 ? "&e" : "&a") + parseString(data.getValue(), 2, true) + "원"));
                             top++;
                         }
+                        p.sendMessage(chat("&7========= &e[ &f돈 순위 &e] &7========="));
                         return true;
                     }
                     case "set" -> {
