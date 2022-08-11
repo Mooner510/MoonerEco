@@ -74,16 +74,17 @@ public class MoonerEco extends JavaPlugin implements Listener {
         p.sendMessage(prefix + chat("&f잔고 : &a" + parseString(EcoAPI.init.getPay(p), 2, true) + "&f원"));
     }
 
-    public void you(Player p, OfflinePlayer o) {
-        p.sendMessage(prefix + chat("&a"+o.getName()+"&f님의 잔고 : &a" + parseString(EcoAPI.init.getPay(p), 2, true) + "&f원"));
+    public void you(CommandSender p, OfflinePlayer o) {
+        p.sendMessage(prefix + chat("&a"+o.getName()+"&f님의 잔고 : &a" + parseString(EcoAPI.init.getPay(o), 2, true) + "&f원"));
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (cmd.getName().equals("money") && sender instanceof Player p) {
+        if (cmd.getName().equals("money")) {
             if(args.length >= 1) {
                 switch (args[0].toLowerCase()) {
                     case "보내기", "qhsorl", "send", "pay" -> {
+                        if(!(sender instanceof Player p)) return true;
                         if(args.length >= 2) {
                             if(args.length >= 3) {
                                 OfflinePlayer player = getOfflinePlayer(args[1]);
@@ -127,6 +128,7 @@ public class MoonerEco extends JavaPlugin implements Listener {
                         return true;
                     }
                     case "순위", "top", "tnsdnl" -> {
+                        if(!(sender instanceof Player p)) return true;
                         p.sendMessage(chat("&7========= &e[ &f돈 순위 &e] &7========="));
                         int top = 1;
                         for (MoneyData data : EcoAPI.init.getTopUser(8)) {
@@ -138,108 +140,126 @@ public class MoonerEco extends JavaPlugin implements Listener {
                         return true;
                     }
                     case "set" -> {
-                        if(p.isOp()) {
-                            if(args.length >= 2) {
-                                if(args.length >= 3) {
-                                    OfflinePlayer player = getOfflinePlayer(args[1]);
-                                    if(player == null) {
-                                        p.sendMessage(prefix + chat("&6"+args[1]+"&c님은 오프라인이거나 알 수 없는 플레이어입니다."));
-                                        return true;
-                                    }
-                                    double d;
-                                    try {
-                                        int index;
-                                        if((index = args[2].indexOf(".")) != -1)
-                                            args[2] = args[2].substring(0, Math.min(index + 2, args[2].length()));
-                                        d = Double.parseDouble(args[2]);
-                                    } catch (Exception e) {
-                                        p.sendMessage(prefix + chat("&c정확한 숫자를 입력해 주세요!"));
-                                        return true;
-                                    }
-                                    EcoAPI.init.setPay(player, d);
-                                    EcoAPI.init.log(player, p, LogType.ADMIN_SET, d);
-                                    p.sendMessage(prefix + chat("&e" + player.getName() + "&f님의 잔고를 &a" + parseString(d, 2, true) + "원&f으로 설정했습니다."));
-                                } else {
-                                    p.sendMessage(prefix + chat("&c설정할 금액을 입력해주세요."));
-                                }
-                            } else {
-                                p.sendMessage(prefix + chat("&c플레이어를 입력해주세요."));
-                            }
+                        if(sender instanceof Player p && !p.isOp()) {
+                            me(p);
                             return true;
                         }
+                        if(args.length >= 2) {
+                            if(args.length >= 3) {
+                                OfflinePlayer player = getOfflinePlayer(args[1]);
+                                if(player == null) {
+                                    sender.sendMessage(prefix + chat("&6"+args[1]+"&c님은 오프라인이거나 알 수 없는 플레이어입니다."));
+                                    return true;
+                                }
+                                double d;
+                                try {
+                                    int index;
+                                    if((index = args[2].indexOf(".")) != -1)
+                                        args[2] = args[2].substring(0, Math.min(index + 2, args[2].length()));
+                                    d = Double.parseDouble(args[2]);
+                                } catch (Exception e) {
+                                    sender.sendMessage(prefix + chat("&c정확한 숫자를 입력해 주세요!"));
+                                    return true;
+                                }
+                                EcoAPI.init.setPay(player, d);
+                                if(sender instanceof Player p) {
+                                    EcoAPI.init.log(player, p, LogType.ADMIN_SET, d);
+                                } else {
+                                    EcoAPI.init.log(player, null, LogType.ADMIN_SET, d);
+                                }
+                                sender.sendMessage(prefix + chat("&e" + player.getName() + "&f님의 잔고를 &a" + parseString(d, 2, true) + "원&f으로 설정했습니다."));
+                            } else {
+                                sender.sendMessage(prefix + chat("&c설정할 금액을 입력해주세요."));
+                            }
+                        } else {
+                            sender.sendMessage(prefix + chat("&c플레이어를 입력해주세요."));
+                        }
+                        return true;
                     }
                     case "add" -> {
-                        if(p.isOp()) {
-                            if(args.length >= 2) {
-                                if(args.length >= 3) {
-                                    OfflinePlayer player = getOfflinePlayer(args[1]);
-                                    if(player == null) {
-                                        p.sendMessage(prefix + chat("&6"+args[1]+"&c님은 오프라인이거나 알 수 없는 플레이어입니다."));
-                                        return true;
-                                    }
-                                    double d;
-                                    try {
-                                        int index;
-                                        if((index = args[2].indexOf(".")) != -1)
-                                            args[2] = args[2].substring(0, Math.min(index + 2, args[2].length()));
-                                        d = Double.parseDouble(args[2]);
-                                    } catch (Exception e) {
-                                        p.sendMessage(prefix + chat("&c정확한 숫자를 입력해 주세요!"));
-                                        return true;
-                                    }
-                                    EcoAPI.init.addPay(player, d);
-                                    EcoAPI.init.log(player, p, LogType.ADMIN_ADD, d);
-                                    p.sendMessage(prefix + chat("&e" + player.getName() + "&f님의 잔고에 &a" + parseString(d, 2, true) + "원&f을 추가했습니다."));
-                                } else {
-                                    p.sendMessage(prefix + chat("&c설정할 금액을 입력해주세요."));
-                                }
-                            } else {
-                                p.sendMessage(prefix + chat("&c플레이어를 입력해주세요."));
-                            }
+                        if(sender instanceof Player p && !p.isOp()) {
+                            me(p);
                             return true;
                         }
+                        if(args.length >= 2) {
+                            if(args.length >= 3) {
+                                OfflinePlayer player = getOfflinePlayer(args[1]);
+                                if(player == null) {
+                                    sender.sendMessage(prefix + chat("&6"+args[1]+"&c님은 오프라인이거나 알 수 없는 플레이어입니다."));
+                                    return true;
+                                }
+                                double d;
+                                try {
+                                    int index;
+                                    if((index = args[2].indexOf(".")) != -1)
+                                        args[2] = args[2].substring(0, Math.min(index + 2, args[2].length()));
+                                    d = Double.parseDouble(args[2]);
+                                } catch (Exception e) {
+                                    sender.sendMessage(prefix + chat("&c정확한 숫자를 입력해 주세요!"));
+                                    return true;
+                                }
+                                EcoAPI.init.addPay(player, d);
+                                if(sender instanceof Player p) {
+                                    EcoAPI.init.log(player, p, LogType.ADMIN_ADD, d);
+                                } else {
+                                    EcoAPI.init.log(player, null, LogType.ADMIN_ADD, d);
+                                }
+                                sender.sendMessage(prefix + chat("&e" + player.getName() + "&f님의 잔고에 &a" + parseString(d, 2, true) + "원&f을 추가했습니다."));
+                            } else {
+                                sender.sendMessage(prefix + chat("&c추가할 금액을 입력해주세요."));
+                            }
+                        } else {
+                            sender.sendMessage(prefix + chat("&c플레이어를 입력해주세요."));
+                        }
+                        return true;
                     }
                     case "remove" -> {
-                        if(p.isOp()) {
-                            if(args.length >= 2) {
-                                if(args.length >= 3) {
-                                    OfflinePlayer player = getOfflinePlayer(args[1]);
-                                    if(player == null) {
-                                        p.sendMessage(prefix + chat("&6"+args[1]+"&c님은 오프라인이거나 알 수 없는 플레이어입니다."));
-                                        return true;
-                                    }
-                                    double d;
-                                    try {
-                                        int index;
-                                        if((index = args[2].indexOf(".")) != -1)
-                                            args[2] = args[2].substring(0, Math.min(index + 2, args[2].length()));
-                                        d = Double.parseDouble(args[2]);
-                                    } catch (Exception e) {
-                                        p.sendMessage(prefix + chat("&c정확한 숫자를 입력해 주세요!"));
-                                        return true;
-                                    }
-                                    EcoAPI.init.addPay(player, d);
-                                    EcoAPI.init.log(player, p, LogType.ADMIN_ADD, d);
-                                    p.sendMessage(prefix + chat("&e" + player.getName() + "&f님의 잔고에서 &a" + parseString(d, 2, true) + "원&f을 제거했습니다."));
-                                } else {
-                                    p.sendMessage(prefix + chat("&c설정할 금액을 입력해주세요."));
-                                }
-                            } else {
-                                p.sendMessage(prefix + chat("&c플레이어를 입력해주세요."));
-                            }
+                        if(sender instanceof Player p && !p.isOp()) {
+                            me(p);
                             return true;
                         }
+                        if(args.length >= 2) {
+                            if(args.length >= 3) {
+                                OfflinePlayer player = getOfflinePlayer(args[1]);
+                                if(player == null) {
+                                    sender.sendMessage(prefix + chat("&6"+args[1]+"&c님은 오프라인이거나 알 수 없는 플레이어입니다."));
+                                    return true;
+                                }
+                                double d;
+                                try {
+                                    int index;
+                                    if((index = args[2].indexOf(".")) != -1)
+                                        args[2] = args[2].substring(0, Math.min(index + 2, args[2].length()));
+                                    d = Double.parseDouble(args[2]);
+                                } catch (Exception e) {
+                                    sender.sendMessage(prefix + chat("&c정확한 숫자를 입력해 주세요!"));
+                                    return true;
+                                }
+                                EcoAPI.init.removePay(player, d);
+                                if(sender instanceof Player p) {
+                                    EcoAPI.init.log(player, p, LogType.ADMIN_ADD, -d);
+                                } else {
+                                    EcoAPI.init.log(player, null, LogType.ADMIN_ADD, -d);
+                                }
+                                sender.sendMessage(prefix + chat("&e" + player.getName() + "&f님의 잔고에서 &a" + parseString(d, 2, true) + "원&f을 제거했습니다."));
+                            } else {
+                                sender.sendMessage(prefix + chat("&c제거할 금액을 입력해주세요."));
+                            }
+                        } else {
+                            sender.sendMessage(prefix + chat("&c플레이어를 입력해주세요."));
+                        }
+                        return true;
                     }
                     default -> {
                         OfflinePlayer player = getOfflinePlayer(args[0]);
                         if(player != null) {
-                            you(p, player);
+                            you(sender, player);
                             return true;
                         }
                     }
                 }
             }
-            me(p);
+            if(sender instanceof Player p) me(p);
             return true;
         }
         return false;

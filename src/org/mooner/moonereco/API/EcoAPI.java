@@ -180,7 +180,8 @@ public class EcoAPI {
             ) {
                 s.setString(1, type.toString());
                 s.setString(2, player.getUniqueId().toString());
-                s.setString(3, to.getUniqueId().toString());
+                if(to == null) s.setString(3, "Console");
+                else s.setString(3, to.getUniqueId().toString());
                 s.setDouble(4, amount);
                 s.setLong(5, time);
                 s.executeUpdate();
