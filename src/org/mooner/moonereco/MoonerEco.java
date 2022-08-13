@@ -84,7 +84,10 @@ public class MoonerEco extends JavaPlugin implements Listener {
             if(args.length >= 1) {
                 switch (args[0].toLowerCase()) {
                     case "보내기", "qhsorl", "send", "pay" -> {
-                        if(!(sender instanceof Player p)) return true;
+                        if(!(sender instanceof Player p)) {
+                            sender.sendMessage(chat("&cIt is Player Command!"));
+                            return true;
+                        }
                         if(args.length >= 2) {
                             if(args.length >= 3) {
                                 OfflinePlayer player = getOfflinePlayer(args[1]);
@@ -128,7 +131,10 @@ public class MoonerEco extends JavaPlugin implements Listener {
                         return true;
                     }
                     case "순위", "top", "tnsdnl" -> {
-                        if(!(sender instanceof Player p)) return true;
+                        if(!(sender instanceof Player p)) {
+                            sender.sendMessage(chat("&cIt is Player Command!"));
+                            return true;
+                        }
                         p.sendMessage(chat("&7========= &e[ &f돈 순위 &e] &7========="));
                         int top = 1;
                         for (MoneyData data : EcoAPI.init.getTopUser(8)) {
