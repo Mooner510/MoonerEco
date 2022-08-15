@@ -1,6 +1,7 @@
 package org.mooner.moonereco;
 
 import de.epiceric.shopchest.event.ShopBuySellEvent;
+import de.epiceric.shopchest.shop.Shop;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.mooner.moonerbungeeapi.api.BungeeAPI;
@@ -63,7 +64,12 @@ public class MoonerEco extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onShop(ShopBuySellEvent e) {
-        EcoAPI.init.log(e.getPlayer(), e.getType().toString(), e.getShop().getItem().getItemStack().getType() + ":" + e.getNewAmount(), e.getNewPrice());
+        final String s = e.getShop().getItem().getItemStack().getType() + ":" + e.getNewAmount();
+        if(e.getShop().getShopType() == Shop.ShopType.NORMAL) {
+            EcoAPI.init.log(e.getPlayer(), e.getShop().getVendor(), LogType.valueOf(e.getType().toString()), s, e.getNewPrice());
+        } else {
+            EcoAPI.init.log(e.getPlayer(), "Admin Shop", LogType.valueOf(e.getType().toString()), s, e.getNewPrice());
+        }
     }
 
     private static final String prefix = chat("&e[ &f돈 &e] ");

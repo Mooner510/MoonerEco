@@ -178,6 +178,10 @@ public class EcoAPI {
     }
 
     public void log(OfflinePlayer player, OfflinePlayer to, LogType type, String data, double amount) {
+        log(player, to == null ? "Console" : to.getUniqueId().toString(), type, data, amount);
+    }
+
+    public void log(OfflinePlayer player, String to, LogType type, String data, double amount) {
         long time = System.currentTimeMillis();
         Bukkit.getScheduler().runTaskAsynchronously(MoonerEco.plugin, () -> {
             try (
@@ -186,8 +190,7 @@ public class EcoAPI {
             ) {
                 s.setString(1, type.toString());
                 s.setString(2, player.getUniqueId().toString());
-                if(to == null) s.setString(3, "Console");
-                else s.setString(3, to.getUniqueId().toString());
+                s.setString(3, to);
                 if(data == null) s.setNull(4, Type.CHAR);
                 else s.setString(4, data);
                 s.setDouble(5, amount);
