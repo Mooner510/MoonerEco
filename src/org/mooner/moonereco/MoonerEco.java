@@ -287,15 +287,20 @@ public class MoonerEco extends JavaPlugin implements Listener {
         return false;
     }
 
-    private final List<String> adminList = List.of("보내기", "순위", "set", "add");
-    private final List<String> normalList = List.of("보내기", "순위");
+    private final List<String> adminList = List.of("보내기", "qhsorl", "send", "pay", "순위", "top", "tnsdnl", "set", "add", "remove");
+    private final List<String> normalList = List.of("보내기", "qhsorl", "send", "pay", "순위", "top", "tnsdnl");
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (command.getName().equals("money") && sender instanceof Player p) {
-            if(args.length == 1) {
+            if(args.length <= 2) {
                 ArrayList<String> list = new ArrayList<>(p.isOp() ? adminList : normalList);
-                list.addAll(Arrays.stream(Bukkit.getOfflinePlayers()).map(OfflinePlayer::getName).filter(Objects::nonNull).toList());
+                list.addAll(
+                        Arrays.stream(Bukkit.getOfflinePlayers())
+                        .map(OfflinePlayer::getName)
+                        .filter(s -> Objects.nonNull(s) && s.startsWith(args[args.length - 1]))
+                        .toList()
+                );
                 return list;
             }
         }
