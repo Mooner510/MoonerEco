@@ -1,5 +1,6 @@
 package org.mooner.moonereco;
 
+import de.epiceric.shopchest.event.ShopBuySellEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.mooner.moonerbungeeapi.api.BungeeAPI;
@@ -60,6 +61,11 @@ public class MoonerEco extends JavaPlugin implements Listener {
         }
     }
 
+    @EventHandler
+    public void onShop(ShopBuySellEvent e) {
+        EcoAPI.init.log(e.getPlayer(), e.getType().toString(), e.getShop().getItem().getItemStack().getType() + ":" + e.getNewAmount(), e.getNewPrice());
+    }
+
     private static final String prefix = chat("&e[ &f돈 &e] ");
 
     public OfflinePlayer getOfflinePlayer(String s) {
@@ -90,6 +96,10 @@ public class MoonerEco extends JavaPlugin implements Listener {
                         }
                         if(args.length >= 2) {
                             if(args.length >= 3) {
+                                if(sender.getName().equals(args[1])) {
+                                    p.sendMessage(prefix + chat("&c자기 자신에게 보낼 수 없습니다."));
+                                    return true;
+                                }
                                 OfflinePlayer player = getOfflinePlayer(args[1]);
                                 if(player == null) {
                                     p.sendMessage(prefix + chat("&6"+args[1]+"&c님은 오프라인이거나 알 수 없는 플레이어입니다."));

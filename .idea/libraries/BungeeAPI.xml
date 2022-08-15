@@ -1,7 +1,8 @@
 <component name="libraryTable">
   <library name="BungeeAPI">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../../Servers/1.18/Lite24/메인서버/plugins/BungeeAPI.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../Servers/1.18/Lite24/야생서버/plugins/BungeeAPI.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../Servers/1.18/Lite24/야생서버/plugins/ShopChest-1.18.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

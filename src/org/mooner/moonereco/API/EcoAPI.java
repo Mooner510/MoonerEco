@@ -1,5 +1,6 @@
 package org.mooner.moonereco.API;
 
+import com.comphenix.net.bytebuddy.jar.asm.Type;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -48,6 +49,7 @@ public class EcoAPI {
                                 "uuid TEXT NOT NULL," +
                                 "uuid2 TEXT," +
                                 "value REAL NOT NULL," +
+                                "data TEXT NOT NULL," +
                                 "timestamp INTEGER NOT NULL," +
                                 "PRIMARY KEY(id AUTOINCREMENT)" +
                                 ")")
@@ -172,18 +174,50 @@ public class EcoAPI {
     }
 
     public void log(OfflinePlayer player, OfflinePlayer to, LogType type, double amount) {
+        log(player, to, type, null, amount);
+    }
+
+    public void log(OfflinePlayer player, OfflinePlayer to, LogType type, String data, double amount) {
         long time = System.currentTimeMillis();
         Bukkit.getScheduler().runTaskAsynchronously(MoonerEco.plugin, () -> {
             try (
                     Connection c = DriverManager.getConnection(CONNECTION);
-                    PreparedStatement s = c.prepareStatement("INSERT INTO Log (source, uuid, uuid2, value, timestamp) VALUES(?, ?, ?, ?, ?)")
+                    PreparedStatement s = c.prepareStatement("INSERT INTO Log (source, uuid, uuid2, data, value, timestamp) VALUES(?, ?, ?, ?, ?, ?)")
             ) {
                 s.setString(1, type.toString());
                 s.setString(2, player.getUniqueId().toString());
                 if(to == null) s.setString(3, "Console");
                 else s.setString(3, to.getUniqueId().toString());
-                s.setDouble(4, amount);
-                s.setLong(5, time);
+                if(data == null) s.setNull(4, Type.CHAR);
+                else s.setString(4, data);
+                s.setDouble(5, amount);
+                s.setLong(6, time);
+                s.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void log(OfflinePlayer player, String type, String data, double amount) {
+        log(player, null, type, data, amount);
+    }
+
+    public void log(OfflinePlayer player, OfflinePlayer to, String type, String data, double amount) {
+        long time = System.currentTimeMillis();
+        Bukkit.getScheduler().runTaskAsynchronously(MoonerEco.plugin, () -> {
+            try (
+                    Connection c = DriverManager.getConnection(CONNECTION);
+                    PreparedStatement s = c.prepareStatement("INSERT INTO Log (source, uuid, uuid2, data, value, timestamp) VALUES(?, ?, ?, ?, ?, ?)")
+            ) {
+                s.setString(1, type);
+                s.setString(2, player.getUniqueId().toString());
+                if(to == null) s.setNull(3, Type.CHAR);
+                else s.setString(3, to.getUniqueId().toString());
+                if(data == null) s.setNull(4, Type.CHAR);
+                else s.setString(4, data);
+                s.setDouble(5, amount);
+                s.setLong(6, time);
                 s.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -200,7 +234,7 @@ public class EcoAPI {
             s.setString(1, uuid.toString());
             try (ResultSet r = s.executeQuery()) {
                 List<LogData> list = new ArrayList<>();
-                while (r.next()) list.add(new LogData(r.getString("uuid"), uuid, LogType.PAY, r.getDouble("value"), r.getLong("timestamp")));
+                while (r.next()) list.add(new LogData(r.getString("uuid"), uuid, LogType.PAY, r.getString("data"), r.getDouble("value"), r.getLong("timestamp")));
                 return list;
             }
         } catch (SQLException e) {
