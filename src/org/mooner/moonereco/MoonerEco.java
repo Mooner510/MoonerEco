@@ -294,7 +294,12 @@ public class MoonerEco extends JavaPlugin implements Listener {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (command.getName().equals("money") && sender instanceof Player p) {
             if(args.length == 1) {
-                return new ArrayList<>(p.isOp() ? adminList : normalList);
+                final ArrayList<String> list = new ArrayList<>(p.isOp() ? adminList : normalList);
+                list.addAll(Arrays.stream(Bukkit.getOfflinePlayers())
+                        .map(OfflinePlayer::getName)
+                        .filter(s -> Objects.nonNull(s) && s.toLowerCase().startsWith(args[args.length - 1].toLowerCase()))
+                        .toList());
+                return list;
             } else if(args.length <= 2) {
                 return Arrays.stream(Bukkit.getOfflinePlayers())
                         .map(OfflinePlayer::getName)
