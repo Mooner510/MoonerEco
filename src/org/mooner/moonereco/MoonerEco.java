@@ -298,7 +298,7 @@ public class MoonerEco extends JavaPlugin implements Listener {
             } else if(args.length <= 2) {
                 return Arrays.stream(Bukkit.getOfflinePlayers())
                         .map(OfflinePlayer::getName)
-                        .filter(s -> Objects.nonNull(s) && s.startsWith(args[args.length - 1]))
+                        .filter(s -> Objects.nonNull(s) && s.toLowerCase().startsWith(args[args.length - 1].toLowerCase()))
                         .toList();
             }
         }
