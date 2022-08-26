@@ -136,6 +136,24 @@ public class EcoAPI {
         setPay(p, getPay(p) - amount);
     }
 
+    public List<MoneyData> getTopUser() {
+        try (
+                Connection c = DriverManager.getConnection(CONNECTION);
+                PreparedStatement s = c.prepareStatement("SELECT * FROM Money")
+        ) {
+            try (ResultSet r = s.executeQuery()) {
+                List<MoneyData> list = new ArrayList<>();
+                while (r.next()) list.add(new MoneyData(r.getString("uuid"), r.getDouble("value")));
+                return list.stream()
+                        .sorted(Comparator.comparing(MoneyData::getValue).reversed())
+                        .toList();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
     public List<MoneyData> getTopUser(long length) {
         try (
                 Connection c = DriverManager.getConnection(CONNECTION);

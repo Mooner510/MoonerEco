@@ -153,11 +153,20 @@ public class MoonerEco extends JavaPlugin implements Listener {
                         }
                         p.sendMessage(chat("&7========= &e[ &f돈 순위 &e] &7========="));
                         int top = 1;
-                        for (MoneyData data : EcoAPI.init.getTopUser(8)) {
+                        int myTop = 0;
+                        final List<MoneyData> topUser = EcoAPI.init.getTopUser();
+                        for (MoneyData data : topUser) {
                             OfflinePlayer player = Bukkit.getOfflinePlayer(data.getUUID());
-                            p.sendMessage(chat("  &b" + player.getName() + " &f- " + (top == 1 ? "&c" : top == 2 ? "&6" : top == 3 ? "&e" : "&a") + parseString(data.getValue(), 2, true) + "원"));
-                            top++;
+                            final String s = top == 1 ? "&c" : top == 2 ? "&6" : top == 3 ? "&e" : top <= 5 ? "&a" : "&7";
+                            if(p.getName().equals(player.getName())) {
+                                if(top <= 8) p.sendMessage(chat("  &d" + player.getName() + " &f- " + s + parseString(data.getValue(), 2, true) + "원"));
+                                myTop = top;
+                            } else {
+                                if(top <= 8) p.sendMessage(chat("  &b" + player.getName() + " &f- " + s + parseString(data.getValue(), 2, true) + "원"));
+                            }
+                            if(top++ >= 8 && myTop != 0) break;
                         }
+                        if(myTop > 8) p.sendMessage(chat(" &f나의 순위: &7" + (top == 1 ? "&c" : top == 2 ? "&6" : top == 3 ? "&e" : top <= 5 ? "&a" : "&7") + top + "위"));
                         p.sendMessage(chat("&7========= &e[ &f돈 순위 &e] &7========="));
                         return true;
                     }
