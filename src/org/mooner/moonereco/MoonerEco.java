@@ -64,11 +64,10 @@ public class MoonerEco extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onShop(ShopBuySellEvent e) {
-        final String s = e.getShop().getItem().getItemStack().getType() + ":" + e.getNewAmount();
         if(e.getShop().getShopType() == Shop.ShopType.NORMAL) {
-            EcoAPI.init.log(e.getPlayer(), e.getShop().getVendor(), LogType.valueOf(e.getType().toString()), s, e.getNewPrice());
+            EcoAPI.init.log(e.getPlayer(), e.getShop().getVendor(), LogType.valueOf(e.getType().toString()), e.getShop().getItem().getItemStack().getType().toString(), e.getNewAmount(), e.getNewPrice());
         } else {
-            EcoAPI.init.log(e.getPlayer(), "Admin Shop", LogType.valueOf(e.getType().toString()), s, e.getNewPrice());
+            EcoAPI.init.log(e.getPlayer(), "Admin Shop", LogType.valueOf(e.getType().toString()), e.getShop().getItem().getItemStack().getType().toString(), e.getNewAmount(), e.getNewPrice());
         }
     }
 

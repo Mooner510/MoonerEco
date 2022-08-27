@@ -49,7 +49,8 @@ public class EcoAPI {
                                 "uuid TEXT NOT NULL," +
                                 "uuid2 TEXT," +
                                 "value REAL NOT NULL," +
-                                "data TEXT NOT NULL," +
+                                "data TEXT," +
+                                "amount INTEGER," +
                                 "timestamp INTEGER NOT NULL," +
                                 "PRIMARY KEY(id AUTOINCREMENT)" +
                                 ")")
@@ -191,28 +192,30 @@ public class EcoAPI {
         });
     }
 
-    public void log(OfflinePlayer player, OfflinePlayer to, LogType type, double amount) {
-        log(player, to, type, null, amount);
+    public void log(OfflinePlayer player, OfflinePlayer to, LogType type, double value) {
+        log(player, to, type, null, null, value);
     }
 
-    public void log(OfflinePlayer player, OfflinePlayer to, LogType type, String data, double amount) {
-        log(player, to == null ? "Console" : to.getUniqueId().toString(), type, data, amount);
+    public void log(OfflinePlayer player, OfflinePlayer to, LogType type, String data, Integer amount, double value) {
+        log(player, to == null ? "Console" : to.getUniqueId().toString(), type, data, amount, value);
     }
 
-    public void log(OfflinePlayer player, String to, LogType type, String data, double amount) {
+    public void log(OfflinePlayer player, String to, LogType type, String data, Integer amount, double value) {
         long time = System.currentTimeMillis();
         Bukkit.getScheduler().runTaskAsynchronously(MoonerEco.plugin, () -> {
             try (
                     Connection c = DriverManager.getConnection(CONNECTION);
-                    PreparedStatement s = c.prepareStatement("INSERT INTO Log (source, uuid, uuid2, data, value, timestamp) VALUES(?, ?, ?, ?, ?, ?)")
+                    PreparedStatement s = c.prepareStatement("INSERT INTO Log (source, uuid, uuid2, data, amount, value, timestamp) VALUES(?, ?, ?, ?, ?, ?, ?)")
             ) {
                 s.setString(1, type.toString());
                 s.setString(2, player.getUniqueId().toString());
                 s.setString(3, to);
                 if(data == null) s.setNull(4, Type.CHAR);
                 else s.setString(4, data);
-                s.setDouble(5, amount);
-                s.setLong(6, time);
+                if(amount == null) s.setNull(5, Type.INT);
+                else s.setInt(5, amount);
+                s.setDouble(6, value);
+                s.setLong(7, time);
                 s.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -220,16 +223,16 @@ public class EcoAPI {
         });
     }
 
-    public void log(OfflinePlayer player, String type, String data, double amount) {
-        log(player, null, type, data, amount);
+    public void log(OfflinePlayer player, String type, String data, Integer amount, double value) {
+        log(player, null, type, data, amount, value);
     }
 
-    public void log(OfflinePlayer player, OfflinePlayer to, String type, String data, double amount) {
+    public void log(OfflinePlayer player, OfflinePlayer to, String type, String data, Integer amount, double value) {
         long time = System.currentTimeMillis();
         Bukkit.getScheduler().runTaskAsynchronously(MoonerEco.plugin, () -> {
             try (
                     Connection c = DriverManager.getConnection(CONNECTION);
-                    PreparedStatement s = c.prepareStatement("INSERT INTO Log (source, uuid, uuid2, data, value, timestamp) VALUES(?, ?, ?, ?, ?, ?)")
+                    PreparedStatement s = c.prepareStatement("INSERT INTO Log (source, uuid, uuid2, data, amount, value, timestamp) VALUES(?, ?, ?, ?, ?, ?, ?)")
             ) {
                 s.setString(1, type);
                 s.setString(2, player.getUniqueId().toString());
@@ -237,8 +240,10 @@ public class EcoAPI {
                 else s.setString(3, to.getUniqueId().toString());
                 if(data == null) s.setNull(4, Type.CHAR);
                 else s.setString(4, data);
-                s.setDouble(5, amount);
-                s.setLong(6, time);
+                if(amount == null) s.setNull(5, Type.INT);
+                else s.setInt(5, amount);
+                s.setDouble(6, value);
+                s.setLong(7, time);
                 s.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
