@@ -2,6 +2,7 @@ package org.mooner.moonereco;
 
 import de.epiceric.shopchest.event.ShopBuySellEvent;
 import de.epiceric.shopchest.shop.Shop;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.mooner.moonerbungeeapi.api.BungeeAPI;
@@ -19,10 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.mooner.moonereco.hook.EcoHook;
 import org.mooner.moonereco.hook.EcoManager;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static org.mooner.moonereco.Utils.chat;
 import static org.mooner.moonereco.Utils.parseString;
@@ -64,11 +62,31 @@ public class MoonerEco extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onShop(ShopBuySellEvent e) {
+        final Map.Entry<Material, Integer> data = toSaveData(e.getShop().getItem().getItemStack().getType());
         if(e.getShop().getShopType() == Shop.ShopType.NORMAL) {
-            EcoAPI.init.log(e.getPlayer(), e.getShop().getVendor(), LogType.valueOf(e.getType().toString()), e.getShop().getItem().getItemStack().getType().toString(), e.getNewAmount(), e.getNewPrice());
+            EcoAPI.init.log(e.getPlayer(), e.getShop().getVendor(), LogType.valueOf(e.getType().toString()), data.getKey().toString(), e.getNewAmount() * data.getValue(), e.getNewPrice());
         } else {
-            EcoAPI.init.log(e.getPlayer(), "Admin Shop", LogType.valueOf(e.getType().toString()), e.getShop().getItem().getItemStack().getType().toString(), e.getNewAmount(), e.getNewPrice());
+            EcoAPI.init.log(e.getPlayer(), "Admin Shop", LogType.valueOf(e.getType().toString()), data.getKey().toString(), e.getNewAmount() * data.getValue(), e.getNewPrice());
         }
+    }
+
+    public Map.Entry<Material, Integer> toSaveData(Material m) {
+        return switch (m) {
+            case COAL_BLOCK -> new AbstractMap.SimpleImmutableEntry<>(Material.COAL, 9);
+            case LAPIS_BLOCK -> new AbstractMap.SimpleImmutableEntry<>(Material.LAPIS_LAZULI, 9);
+            case COPPER_BLOCK -> new AbstractMap.SimpleImmutableEntry<>(Material.COPPER_INGOT, 9);
+            case IRON_BLOCK -> new AbstractMap.SimpleImmutableEntry<>(Material.IRON_INGOT, 9);
+            case GOLD_BLOCK -> new AbstractMap.SimpleImmutableEntry<>(Material.GOLD_INGOT, 9);
+            case QUARTZ_BLOCK -> new AbstractMap.SimpleImmutableEntry<>(Material.QUARTZ, 4);
+            case AMETHYST_BLOCK -> new AbstractMap.SimpleImmutableEntry<>(Material.AMETHYST_SHARD, 4);
+            case GLOWSTONE -> new AbstractMap.SimpleImmutableEntry<>(Material.GLOWSTONE_DUST, 4);
+            case REDSTONE_BLOCK -> new AbstractMap.SimpleImmutableEntry<>(Material.REDSTONE, 9);
+            case NETHERITE_BLOCK -> new AbstractMap.SimpleImmutableEntry<>(Material.NETHERITE_INGOT, 9);
+            case EMERALD_BLOCK -> new AbstractMap.SimpleImmutableEntry<>(Material.EMERALD, 9);
+            case DIAMOND_BLOCK -> new AbstractMap.SimpleImmutableEntry<>(Material.DIAMOND, 9);
+            case DRIED_KELP_BLOCK -> new AbstractMap.SimpleImmutableEntry<>(Material.DRIED_KELP, 9);
+            default -> new AbstractMap.SimpleImmutableEntry<>(m, 1);
+        };
     }
 
     private static final String prefix = chat("&e[ &f돈 &e] ");
