@@ -34,12 +34,24 @@ public class MoonerEco extends JavaPlugin implements Listener {
     public static final String dataPath = "../db/MoonerEco/";
 
     @Override
-    public void onEnable() {
+    public void onLoad() {
         plugin=this;
-        EcoManager = new EcoManager();
-        vaultEcoHook = new EcoHook();
-        vaultEcoHook.hook();
-        EcoAPI.init = new EcoAPI();
+        if(vaultEcoHook == null) {
+            EcoManager = new EcoManager();
+            vaultEcoHook = new EcoHook();
+            vaultEcoHook.hook();
+            EcoAPI.init = new EcoAPI();
+        }
+    }
+
+    @Override
+    public void onEnable() {
+        if(vaultEcoHook == null) {
+            EcoManager = new EcoManager();
+            vaultEcoHook = new EcoHook();
+            vaultEcoHook.hook();
+            EcoAPI.init = new EcoAPI();
+        }
 
         Bukkit.getConsoleSender().sendMessage(chat("&bPlugin Enabled! &7- &6MoonerEco"));
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");

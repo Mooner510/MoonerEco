@@ -1,10 +1,12 @@
 name: MoonerEco
 main: org.mooner.moonereco.MoonerEco
 version: 1.0\
-depend:  [Vault, ProtocolLib, ShopChest-1.18]
+depend:  [Vault, ProtocolLib]
 description: Bank and Economy Plugin
 author: Mooner510
 api-version: 1.18
+softdepend:
+  - ShopChest-1.18
 
 commands:
   money:
