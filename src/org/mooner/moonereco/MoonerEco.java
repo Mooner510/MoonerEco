@@ -228,11 +228,12 @@ public class MoonerEco extends JavaPlugin implements Listener {
                                     sender.sendMessage(prefix + chat("&c정확한 숫자를 입력해 주세요!"));
                                     return true;
                                 }
+                                final double pay = EcoAPI.init.getPay(player);
                                 EcoAPI.init.setPay(player, d);
                                 if(sender instanceof Player p) {
-                                    EcoAPI.init.log(player, p, LogType.ADMIN_SET, d);
+                                    EcoAPI.init.log(player, p, LogType.ADMIN_ADD, d - pay);
                                 } else {
-                                    EcoAPI.init.log(player, null, LogType.ADMIN_SET, d);
+                                    EcoAPI.init.log(player, null, LogType.ADMIN_ADD, d - pay);
                                 }
                                 sender.sendMessage(prefix + chat("&e" + player.getName() + "&f님의 잔고를 &a" + parseString(d, 2, true) + "원&f으로 설정했습니다."));
                             } else {
