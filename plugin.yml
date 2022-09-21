@@ -1,7 +1,7 @@
 name: MoonerEco
 main: org.mooner.moonereco.MoonerEco
 version: 1.0\
-depend:  [Vault, ProtocolLib]
+depend:  [Vault, ProtocolLib, BungeeAPI]
 description: Bank and Economy Plugin
 author: Mooner510
 api-version: 1.18
