@@ -182,12 +182,32 @@ public class EcoAPI {
         Bukkit.getScheduler().runTaskAsynchronously(MoonerEco.plugin, () -> {
             try (
                     Connection c = DriverManager.getConnection(CONNECTION);
-                    PreparedStatement s = c.prepareStatement("INSERT INTO Log (source, uuid, uuid2, value, timestamp) VALUES(?, ?, null, ?, ?)")
+                    PreparedStatement s = c.prepareStatement("INSERT INTO Log (source, uuid, value, timestamp) VALUES(?, ?, ?, ?)")
             ) {
                 s.setString(1, type.toString());
                 s.setString(2, player.getUniqueId().toString());
                 s.setDouble(3, amount);
                 s.setLong(4, time);
+                s.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void log(OfflinePlayer player, LogType type, double amount, Object data) {
+        long time = System.currentTimeMillis();
+        Bukkit.getScheduler().runTaskAsynchronously(MoonerEco.plugin, () -> {
+            try (
+                    Connection c = DriverManager.getConnection(CONNECTION);
+                    PreparedStatement s = c.prepareStatement("INSERT INTO Log (source, uuid, data, value, timestamp) VALUES(?, ?, ?, ?, ?)")
+            ) {
+                s.setString(1, type.toString());
+                s.setString(2, player.getUniqueId().toString());
+                if(data == null) s.setNull(3, Type.CHAR);
+                else s.setString(3, String.valueOf(data));
+                s.setDouble(4, amount);
+                s.setLong(5, time);
                 s.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
