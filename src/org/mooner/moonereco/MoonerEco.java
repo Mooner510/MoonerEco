@@ -106,8 +106,9 @@ public class MoonerEco extends JavaPlugin implements Listener {
     public OfflinePlayer getOfflinePlayer(String s) {
         Player p = Bukkit.getPlayer(s);
         if(p != null && p.isOnline()) return p;
+        String finder = s.toLowerCase();
         return Arrays.stream(Bukkit.getOfflinePlayers())
-                .filter(o -> (o.getName() != null && o.getName().toLowerCase().equals(s)) || o.getUniqueId().toString().equals(s))
+                .filter(o -> (o.getName() != null && o.getName().toLowerCase().equals(finder)) || o.getUniqueId().toString().equals(finder))
                 .findFirst().orElse(null);
     }
 
